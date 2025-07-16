@@ -1,24 +1,32 @@
 pipeline {
     agent any
 
+    environment {
+        // Optional: Set python path or virtualenv
+        PYTHONUNBUFFERED = 1
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                git 'git@github.com:kmuddise/my-jenkins-demo.git'
+                // Use HTTPS if you're not using SSH keys properly
+                git url: 'https://github.com/kmuddise/my-jenkins-demo.git', branch: 'main'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                sh 'pip install -r requirements.txt'
+                sh 'python3 -m pip install --upgrade pip'
+                sh 'pip3 install -r requirements.txt'
             }
         }
 
         stage('Run App') {
             steps {
-                sh 'python3 app.py &'
+                sh 'nohup python3 app.py > app.log 2>&1 &'
             }
         }
     }
 }
+
 
