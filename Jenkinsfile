@@ -1,19 +1,22 @@
 pipeline {
     agent any
+
     stages {
-        stage('Build') {
+        stage('Checkout') {
             steps {
-                echo '🔧 Building the project...'
+                git 'https://github.com/<your-username>/my-flask-app.git'
             }
         }
-        stage('Test') {
+
+        stage('Install Dependencies') {
             steps {
-                echo '✅ Running tests...'
+                sh 'pip install -r requirements.txt'
             }
         }
-        stage('Deploy') {
+
+        stage('Run App') {
             steps {
-                echo '🚀 Deploying the project...'
+                sh 'python3 app.py &'
             }
         }
     }
